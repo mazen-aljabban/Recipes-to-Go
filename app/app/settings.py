@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'djoser',
     'debug_toolbar',
     'core',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -168,3 +169,7 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1)
 }
+
+AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
+
+AUTH_USER_MODEL = 'users.User'
