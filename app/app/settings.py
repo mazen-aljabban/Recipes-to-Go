@@ -156,12 +156,12 @@ REST_FRAMEWORK = {
     ),
 }
 
-# DJOSER = {
-#     'SERIALIZERS': {
-#         'user_create': 'core.serializers.UserCreateSerializer',
-#         'current_user': 'core.serializers.UserSerializer',
-#     }
-# }
+DJOSER = {
+    'SERIALIZERS': {
+        'user_create': 'core.serializers.UserCreateSerializer',
+        'current_user': 'core.serializers.UserSerializer',
+    }
+}
 
 
 
@@ -170,6 +170,6 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1)
 }
 
-AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
+#AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
 
 AUTH_USER_MODEL = 'users.User'
