@@ -20,7 +20,7 @@ class Chef(models.Model):
     
     @admin.display(ordering='user__last_name')
     def last_name(self):
-        return self.user.last_name
+        return self.user.last_name 
     
 
     class Meta:
@@ -32,3 +32,21 @@ class Ingredient(models.Model):
     chef = models.ForeignKey(Chef, on_delete=models.SET_NULL, null=True)  
     def __str__(self):
         return self.name
+    
+    
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    
+    
+class collection(models.Model):
+    name = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    
+    
+class Recipe(models.Model):
+    chef = models.ForeignKey(Chef,on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    instructions = models.TextField(max_length=2048)
+    time_minutes = models.PositiveIntegerField()
+    Ingredients = models.ManyToManyField(Ingredient)
+    created_at = models.DateTimeField(auto_now_add=True)
