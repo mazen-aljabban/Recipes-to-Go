@@ -4,9 +4,10 @@ from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateMo
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from django.db.models.aggregates import Count
 from .models import *
-from .serializers import ChefSerializer
-from .permissions import IsCreatorOrReadOnly
+from .serializers import *
+from .permissions import IsCreatorOrReadOnly, IsAdminOrReadOnly
 
 
 class ChefViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -35,3 +36,33 @@ class ChefViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, Generi
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
+        
+        
+class CollectionViewSet(ModelViewSet):
+    queryset = Collection.objects.annotate(recipes_count=Count('recipes')).all()
+    serializer_class = CollectionSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    
+    def destroy(self, request, *args, **kwargs):
+        if Recipe.objects.filter(collection_id=kwargs['pk']):
+            return Response({'error': 'Collection cannot be deleted because it includes one or more Recipes.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        return super().destroy(request, *args, **kwargs)
+    
+    
+class IngredientViewSet(ModelViewSet):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    
+    def destroy(self, request, *args, **kwargs):
+        if Recipe.objects.filter(collection_id=kwargs['pk']):
+            return Response({'error': 'Collection cannot be deleted because it is assigned to one or more Recipes.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        return super().destroy(request, *args, **kwargs)
+    
+    
+class CategoryViewSet(ModelViewSet):
+    queryset = Category.objects.annotate(collections_count=Count('collections')).all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsAdminOrReadOnly]

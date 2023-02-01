@@ -13,9 +13,31 @@ class ChefSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Chef
-        fields = ['id', 'user_id','birth_date']
+        fields = ['user_id','birth_date', 'user']
         
 
 class UserSerializer(BaseUserSerializer):
     class Meta(BaseUserSerializer.Meta):
         fields = ['id', 'email', 'first_name', 'last_name']
+        
+        
+class IngredientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ingredient
+        fields = ['id', 'name']
+        
+        
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'collections_count']
+        read_only_fields = ['id',]
+        
+    collections_count = serializers.IntegerField(read_only=True)
+
+class CollectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Collection
+        fields = ['id', 'name', 'recipes_count']
+        
+    recipes_count = serializers.IntegerField(read_only=True)

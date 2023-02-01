@@ -30,17 +30,30 @@ class Chef(models.Model):
 class Ingredient(models.Model):
     name = models.CharField(max_length=255, unique=True)  
     chef = models.ForeignKey(Chef, on_delete=models.SET_NULL, null=True)  
+    
     def __str__(self):
         return self.name
     
     
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    featured_collection = models.ForeignKey(
+        'Collection', on_delete=models.SET_NULL, null=True,
+        related_name='+', blank=True)
+    
+    def __str__(self):
+        return self.name
     
     
-class collection(models.Model):
+class Collection(models.Model):
     name = models.CharField(max_length=100)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=True, related_name='collections')
+    featured_recipe = models.ForeignKey(
+        'Recipe', on_delete=models.SET_NULL, null=True,
+        related_name='+', blank=True)
+    
+    def __str__(self):
+        return self.name
     
     
 class Recipe(models.Model):
@@ -50,3 +63,7 @@ class Recipe(models.Model):
     time_minutes = models.PositiveIntegerField()
     Ingredients = models.ManyToManyField(Ingredient)
     created_at = models.DateTimeField(auto_now_add=True)
+    collection = models.ManyToManyField(Collection, blank=True, related_name='recipes')
+    
+    def __str__(self):
+        return self.title
