@@ -8,6 +8,7 @@ router.register('chef', views.ChefViewSet)
 router.register('collections', views.CollectionViewSet)
 router.register('catagorys', views.CategoryViewSet)
 router.register('ingredients', views.IngredientViewSet)
+router.register('recipes', views.RecipeViewSet)
 
 
 urlpatterns = router.urls

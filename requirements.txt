@@ -15,3 +15,4 @@ whitenoise>=6.3.0,<6.4.9
 django-silk>=5.0.3,<5.1.0
 asgiref==3.6.0
 pytz==2022.7.1
+#drf-nested-routers>=0.93.4,<0.99.9

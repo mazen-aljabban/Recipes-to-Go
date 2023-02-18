@@ -2,10 +2,6 @@ from djoser.serializers import UserSerializer as BaseUserSerializer, UserCreateS
 from rest_framework import serializers
 from .models import *
 
-class UserCreateSerializer(BaseUserCreateSerializer):
-    class Meta(BaseUserCreateSerializer.Meta):
-        fields = ['id', 'email', 'password', 'first_name', 'last_name']
-        
 
 class ChefSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(read_only=True)
@@ -41,3 +37,10 @@ class CollectionSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'recipes_count']
         
     recipes_count = serializers.IntegerField(read_only=True)
+    
+    
+class RecipeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = '__all__'
+        read_only_fields = ['id',]
