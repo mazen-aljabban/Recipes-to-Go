@@ -173,4 +173,10 @@ SIMPLE_JWT = {
 
 #AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
 
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = '/vol/web/media'
+STATIC_ROOT = '/vol/web/static'
+
 AUTH_USER_MODEL = 'users.User'

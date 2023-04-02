@@ -72,10 +72,32 @@ class CategoryViewSet(ModelViewSet):
 class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-
+    
     def get_permissions(self):
         if self.request.method == 'GET':
             return [permissions.AllowAny()]
         elif self.request.user.is_anonymous:
             raise PermissionDenied({'message': 'Unauthorized user. Please log in to continue.'})
         return [IsCreatorOrReadOnly()]
+    
+    
+    @action(methods=['POST'], detail=True, url_path='upload-image')
+    def upload_image(self, request, pk=None):
+        """Upload an image to a recipe"""
+        recipe = self.get_object()
+        serializer = self.get_serializer(
+            recipe,
+            data=request.data
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )

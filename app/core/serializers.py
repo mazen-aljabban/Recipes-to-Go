@@ -1,6 +1,7 @@
 from djoser.serializers import UserSerializer as BaseUserSerializer, UserCreateSerializer as BaseUserCreateSerializer
 from rest_framework import serializers
 from .models import *
+from users.models import User
 
 
 class ChefSerializer(serializers.ModelSerializer):
@@ -40,7 +41,16 @@ class CollectionSerializer(serializers.ModelSerializer):
     
     
 class RecipeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Recipe
-        fields = ['id', 'user', 'title', 'instructions', 'time_minutes', 'Ingredients', 'created_at', 'collection']
+        fields = ['id', 'user', 'title', 'instructions', 'time_minutes', 'Ingredients', 'created_at', 'collection', 'image']
+        read_only_fields = ['id',]
+        
+class RecipeImageSerializer(serializers.ModelSerializer):
+    """Serializer for uploading images to recipes"""
+
+    class Meta:
+        model = Recipe
+        fields = ['id', 'image']
         read_only_fields = ['id',]
