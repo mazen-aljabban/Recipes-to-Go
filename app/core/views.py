@@ -72,6 +72,10 @@ class CategoryViewSet(ModelViewSet):
 class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
+    permission_classes = [IsCreatorOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
     
     def get_permissions(self):
         if self.request.method == 'GET':

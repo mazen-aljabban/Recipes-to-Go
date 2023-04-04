@@ -6,6 +6,11 @@ from users.models import User
 
 class ChefSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(read_only=True)
+    user = serializers.PrimaryKeyRelatedField(read_only=True, source='user.username')
+    
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
     
     
     class Meta:
@@ -41,6 +46,11 @@ class CollectionSerializer(serializers.ModelSerializer):
     
     
 class RecipeSerializer(serializers.ModelSerializer):
+    
+    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
 
     class Meta:
         model = Recipe

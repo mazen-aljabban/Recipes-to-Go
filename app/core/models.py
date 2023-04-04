@@ -63,7 +63,7 @@ class Collection(models.Model):
     
     
 class Recipe(models.Model):
-    user = models.ForeignKey(Chef,on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     instructions = models.TextField(max_length=2048)
     time_minutes = models.PositiveIntegerField()
